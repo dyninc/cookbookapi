@@ -15,3 +15,9 @@ Configuration options are all at the start of cookbook-api.rb
  * COOKBOOK_MAINTAINER - Certain fields in the cookbook metadata are 'filled' with data from here
  
  * API_BASE_URL - The base URL the sinatra app will be listening at (used to make links back to itself)
+
+License
+=======
+
+Apache 2.0
+http://www.apache.org/licenses/LICENSE-2.0.txt
