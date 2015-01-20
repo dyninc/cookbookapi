@@ -19,7 +19,7 @@ require 'archive/tar/minitar'
 include Archive::Tar
 
 def get_chef_client
-  ridley = Ridley.new(
+  Ridley.new(
     server_url: CHEF_SERVER_URL,
     client_name: CHEF_CLIENT_NAME,
     client_key: CHEF_CLIENT_KEY,
@@ -27,7 +27,6 @@ def get_chef_client
       verify: false
     }
   )
-  ridley
 end
 
 def get_cookbook_list(_versions = 1)
