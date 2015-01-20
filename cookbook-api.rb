@@ -72,11 +72,17 @@ get '/:name' do
   response[:category] = COOKBOOK_MAINTAINER
   response[:updated_at] = Time.now.iso8601
   response[:maintainer] = COOKBOOK_MAINTAINER
-  response[:latest_version] = File.join(API_BASE_URL, name, 'versions', my_cookbook.first.gsub('.', '_'))
+  response[:latest_version] = File.join(API_BASE_URL,
+                                        name,
+                                        'versions',
+                                        my_cookbook.first.gsub('.', '_'))
   response[:external_url] = nil
   response[:versions] = []
   my_cookbook.each do |version|
-    response[:versions].push File.join(API_BASE_URL, name, 'versions', version.gsub('.', '_'))
+    response[:versions].push File.join(API_BASE_URL,
+                                       name,
+                                       'versions',
+                                       version.gsub('.', '_'))
   end
   response[:description] = name
   response[:average_rating] = nil
@@ -89,14 +95,21 @@ get '/:name/versions/:version' do
   name = params[:name]
   version = params[:version].gsub('_', '.')
 
-  unless File.exist?(File.join('cookbook-cache', "#{name}-#{version}.tgz"))
+  unless File.exist?(File.join('cookbook-cache',
+                               "#{name}-#{version}.tgz")
+                    )
     Dir.mkdir(name)
     get_cookbook(name, version, name)
-    tgz = Zlib::GzipWriter.new(File.open(File.join('cookbook-cache', "#{name}-#{version}.tgz"), 'wb'))
+    tgz = Zlib::GzipWriter.new(File.open(File.join('cookbook-cache',
+                                                   "#{name}-#{version}.tgz"),
+                                         'wb')
+                              )
     Minitar.pack(name, tgz)
     FileUtils.rm_rf(name)
   end
-  f = File.open(File.join('cookbook-cache', "#{name}-#{version}.tgz"), 'r')
+  f = File.open(File.join('cookbook-cache',
+                          "#{name}-#{version}.tgz"),
+                'r')
   cookbook_size = f.size
   f.close
 
@@ -108,7 +121,10 @@ get '/:name/versions/:version' do
   response[:average_rating] = nil
   response[:cookbook] = File.join(API_BASE_URL, name)
   response[:created_at] = Time.now.iso8601
-  response[:file] = File.join(API_BASE_URL, 'files', name, "#{version.gsub('.', '_')}.tgz")
+  response[:file] = File.join(API_BASE_URL,
+                              'files',
+                              name,
+                              "#{version.gsub('.', '_')}.tgz")
   response.to_json
 end
 
@@ -120,7 +136,9 @@ get '/files/:name/:version' do
   unless File.exist?(File.join('cookbook-cache', "#{name}-#{version}.tgz"))
     Dir.mkdir(name)
     get_cookbook(name, version, name)
-    tgz = Zlib::GzipWriter.new(File.open(File.join('cookbook-cache', "#{name}-#{version}.tgz"), 'wb'))
+    tgz = Zlib::GzipWriter.new(File.open(File.join('cookbook-cache',
+                                                   "#{name}-#{version}.tgz"),
+                                         'wb'))
     Minitar.pack(name, tgz)
     FileUtils.rm_rf(name)
   end
